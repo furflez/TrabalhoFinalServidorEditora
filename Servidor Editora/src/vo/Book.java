@@ -7,6 +7,17 @@ public class Book {
 	private String author;
 	private double price;
 
+	
+	public Book(int iSBN, String name, int dailyProd, String author,
+			double price) {
+		super();
+		ISBN = iSBN;
+		this.name = name;
+		this.dailyProd = dailyProd;
+		this.author = author;
+		this.price = price;
+	}
+
 	public int getISBN() {
 		return ISBN;
 	}
