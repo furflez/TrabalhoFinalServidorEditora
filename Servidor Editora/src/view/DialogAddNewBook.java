@@ -84,7 +84,7 @@ public class DialogAddNewBook extends Dialog {
 
 		Label lblNewLabel_2 = new Label(shlAdicionarNovoLivro, SWT.NONE);
 		lblNewLabel_2.setBounds(10, 58, 92, 14);
-		lblNewLabel_2.setText("Produ√ß√£o Di√°ria:");
+		lblNewLabel_2.setText("ProduÁ„o Di·ria:");
 
 		Label lblAuthor = new Label(shlAdicionarNovoLivro, SWT.NONE);
 		lblAuthor.setBounds(10, 85, 39, 14);
@@ -92,7 +92,7 @@ public class DialogAddNewBook extends Dialog {
 
 		Label lblPrice = new Label(shlAdicionarNovoLivro, SWT.NONE);
 		lblPrice.setBounds(10, 108, 39, 14);
-		lblPrice.setText("Pre√ßo:");
+		lblPrice.setText("PreÁo:");
 
 		Button btnAdd = new Button(shlAdicionarNovoLivro, SWT.NONE);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
@@ -102,7 +102,7 @@ public class DialogAddNewBook extends Dialog {
 						textName.getText().toString(), Integer
 								.parseInt(textDailyProd.getText()), textAuthor
 								.getText().toString(), Double
-								.parseDouble(textPrize.getText()));
+								.parseDouble(textPrize.getText().replace(',', '.')));
 				Main.bookList.add(book);
 				Main.update();
 				shlAdicionarNovoLivro.close();

@@ -1,5 +1,6 @@
 package view;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
@@ -14,7 +15,6 @@ import org.eclipse.swt.widgets.TableItem;
 
 import vo.Book;
 
-
 public class Main {
 	public static Table table;
 	private static Button btnRemoveBook;
@@ -27,8 +27,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		Display display = Display.getDefault();
-		Shell shell = new Shell();
-		shell.setSize(524, 370);
+		final Shell shell = new Shell();
+		shell.setSize(530, 370);
 		shell.setText("SWT Application");
 		bookList = new ArrayList<Book>();
 		table = new Table(shell, SWT.BORDER | SWT.FULL_SELECTION);
@@ -61,10 +61,10 @@ public class Main {
 		btnNewBook.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+
 				DialogAddNewBook add = new DialogAddNewBook(shell, SWT.NONE);
 				add.open();
-				
+
 			}
 		});
 		btnNewBook.setBounds(10, 310, 122, 28);
@@ -86,7 +86,7 @@ public class Main {
 
 			}
 		});
-		
+
 		btnRemoveBook.setBounds(392, 310, 122, 28);
 		btnRemoveBook.setText("Remover Livro");
 
@@ -94,6 +94,10 @@ public class Main {
 		btnEditBook.setBounds(138, 310, 122, 28);
 		btnEditBook.setText("Editar Livro");
 		
+		Button btnIniciarServidor = new Button(shell, SWT.NONE);
+		btnIniciarServidor.setBounds(266, 310, 120, 28);
+		btnIniciarServidor.setText("Iniciar Servidor");
+
 		update();
 
 		shell.open();
@@ -104,17 +108,18 @@ public class Main {
 			}
 		}
 	}
-	
-	public static void update(){
+
+	public static void update() {
+
+		DecimalFormat df = new DecimalFormat("#,##0.00");
+		df.setMaximumFractionDigits(2);
 		table.removeAll();
 		for (Book book : bookList) {
 			TableItem item = new TableItem(table, SWT.NONE);
-			item.setText(new String[] {book.getISBN()+"", book.getName(), book.getAuthor(), book.getDailyProd()+"", "R$"+book.getPrice()});
+			item.setText(new String[] { book.getISBN() + "", book.getName(),
+					book.getAuthor(), book.getDailyProd() + "",
+					"R$" + df.format(book.getPrice()) });
 		}
-		
-	}
-//	MyTitleAreaDialog dialog = new MyTitleAreaDialog(shell);
-//	dialog.create();
-//	if (dialog.open() == Window.OK) {
 
+	}
 }
