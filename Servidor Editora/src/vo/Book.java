@@ -1,12 +1,18 @@
 package vo;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
+	
 	private int ISBN;
 	private String name;
 	private int dailyProd;
 	private String author;
 	private double price;
 
+	public Book(){
+		
+	}
 	
 	public Book(int iSBN, String name, int dailyProd, String author,
 			double price) {
