@@ -7,15 +7,16 @@ public class Book implements Serializable {
 	private int ISBN;
 	private String name;
 	private int dailyProd;
+	private int qtd;
 	private String author;
-	private double price;
+	private float price;
 
 	public Book(){
 		
 	}
 	
 	public Book(int iSBN, String name, int dailyProd, String author,
-			double price) {
+			float price) {
 		super();
 		ISBN = iSBN;
 		this.name = name;
@@ -46,6 +47,15 @@ public class Book implements Serializable {
 
 	public void setDailyProd(int dailyProd) {
 		this.dailyProd = dailyProd;
+		this.setQtd(dailyProd);
+	}
+
+	public int getQtd() {
+		return qtd;
+	}
+
+	public void setQtd(int qtd) {
+		this.qtd = qtd;
 	}
 
 	public String getAuthor() {
@@ -56,11 +66,11 @@ public class Book implements Serializable {
 		this.author = author;
 	}
 
-	public double getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 

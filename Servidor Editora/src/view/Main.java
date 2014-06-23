@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -34,6 +37,9 @@ public class Main {
 
 	public static String ip = "";
 	public static String port = "";
+	
+	private static float pedidoValor;
+	private static float totalPedido;
 
 	/**
 	 * Launch the application.
@@ -201,7 +207,9 @@ public class Main {
 
 		if (string.contains("consultarIsbn")) { //verifica se contem consultarIsbn na string para fazer a busca do livro através da isbn
 			consultarIsbn(string.substring(string.indexOf(":") + 1)); //o consultarIsbn ta recebendo uma string cortada a partir do : 
-		} else {
+		} else if(string.contains("realizarPedido")){ 
+			realizarPedido(string.substring(string.indexOf(":")+1));
+	}else {
 			try {
 				soketSupport.sendData("COMANDO INVÁLIDO! ANEMAL!");//caso não receba a string com um método válido, é retornada essa menságem para o cliente
 			} catch (IOException e) {
@@ -243,6 +251,82 @@ public class Main {
 		}
 	}
 	//metodo que salva a lista inteira num txt de forma serializada
+	
+	private static void realizarPedido(String string) {
+		String[] parametros;
+		String[] isbns;
+		String[] quantidades;
+		if(string.contains("|")){
+			parametros = string.split("\\|");
+		}else{
+			parametros = new String[]{string};
+		}
+		isbns = new String[parametros.length];
+		quantidades = new String[parametros.length];
+		
+		for (int i = 0; i < quantidades.length; i++) {
+			String[] aux;
+			aux = parametros[i].split(",");
+			isbns[i] = aux[0];
+			quantidades[i] = aux[1];
+			
+			
+		}
+		String pedido = "";
+		for (int i = 0; i < parametros.length; i++) {
+			if(i!=parametros.length)
+			pedido.concat(montarPedido(isbns[i], quantidades[i])+"|");
+			else
+			pedido.concat(montarPedido(isbns[i], quantidades[i]));
+		
+		}
+		
+		try {
+			soketSupport.sendData(pedido);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private static String montarPedido(String stringIsbn, String stringQuantidade){
+		String pedido;
+		int isbn = Integer.parseInt(stringIsbn);
+		int qtd = Integer.parseInt(stringQuantidade);
+		Book book = new Book();
+		for (Book b : bookList) {
+			if(b.getISBN() == isbn){
+				book = b;
+				break;
+			}
+		}
+		pedidoValor = book.getPrice()*qtd;
+		
+		String envio = "IMEDIATO";
+		
+		if(qtd > book.getQtd()){
+			int qtdatual = book.getQtd() - qtd;
+			
+			int dias = (int) qtdatual/book.getDailyProd();
+			dias += 1;
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			Calendar c = Calendar.getInstance();
+			c.setTime(new Date()); 
+			c.add(Calendar.DATE, dias); 
+			envio = sdf.format(c.getTime());
+		}
+			
+		pedido = "ISBN:"+book.getISBN()+";"+
+				"NOME:"+book.getName()+";"+
+				"AUTOR:"+book.getAuthor()+";"+
+				"QTD:"+qtd+";"+
+				"VALOR:"+pedidoValor+";"+
+				"ENVIO:"+envio;
+		
+		return pedido;
+	}
+	
 	private static void serializeBooks() {
 		try {
 			FileOutputStream fos = new FileOutputStream("arquivo");

@@ -101,8 +101,8 @@ public class DialogAddNewBook extends Dialog {
 				Book book = new Book(Integer.parseInt(textIsbn.getText()),
 						textName.getText().toString(), Integer
 								.parseInt(textDailyProd.getText()), textAuthor
-								.getText().toString(), Double
-								.parseDouble(textPrize.getText().replace(',', '.')));
+								.getText().toString(), Float
+								.parseFloat(textPrize.getText().replace(',', '.')));
 				Main.bookList.add(book);
 				Main.update();
 				shlAdicionarNovoLivro.close();
